@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+  <head>
+    <title>perl quiz thing</title>
+    <style>
+      body {
+        font-family: Arial;
+        background: #f0f0f0;
+        margin: 20px;
+      }
+      .container {
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        max-width: 500px;
+      }
+      button {
+        background: #ddd;
+        border: 1px solid #999;
+        padding: 5px 10px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #ccc;
+      }
+      .correct {
+        color: green;
+      }
+      .wrong {
+        color: red;
+      }
+      .birthday {
+        font-size: 24px;
+        color: #ff6600;
+        text-align: center;
+        margin: 20px 0;
+        animation: dumbassery 8s infinite linear;
+      }
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #ff6600;
+        animation: fall 3s linear infinite;
+        z-index: 1000;
+      }
+      @keyframes dumbassery {
+        0% {
+          transform: rotate(0deg) scale(1) translateX(0px);
+          color: #ff6600;
+          text-shadow: 3px 3px 0px #000000;
+        }
+        25% {
+          transform: rotate(90deg) scale(1.1) translateX(-50px);
+          color: #ff0066;
+          text-shadow: 3px 3px 0px #000000;
+        }
+        50% {
+          transform: rotate(180deg) scale(1.2) translateX(-100px);
+          color: #00ff66;
+          text-shadow: 3px 3px 0px #000000;
+        }
+        75% {
+          transform: rotate(270deg) scale(1.1) translateX(-50px);
+          color: #0066ff;
+          text-shadow: 3px 3px 0px #000000;
+        }
+        100% {
+          transform: rotate(360deg) scale(1) translateX(0px);
+          color: #ff6600;
+          text-shadow: 3px 3px 0px #000000;
+        }
+      }
+      @keyframes fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <h2>
+        Welcome to your EPIC happy birthday questions!!1! dab on these question
+        to claim the EPIC BIRTHDAY PRIZE
+      </h2>
+      <h3>(TURN YOUR SOUND ON!!!)</h3>
+
+      <div id="question1" style="display: block">
+        <h3>Question 1:</h3>
+        <p>What does the $ symbol represent in Perl?</p>
+        <button onclick="answer(1, 'array')">Array variables</button>
+        <button onclick="answer(1, 'scalar')">Scalar variables</button>
+        <button onclick="answer(1, 'hash')">Hash variables</button>
+        <div id="result1"></div>
+      </div>
+
+      <div id="question2" style="display: none">
+        <h3>Question 2:</h3>
+        <p>Which of these is the correct way to declare an array in Perl?</p>
+        <button onclick="answer(2, 'at')">@array = (1, 2, 3);</button>
+        <button onclick="answer(2, 'dollar')">$array = [1, 2, 3];</button>
+        <button onclick="answer(2, 'percent')">%array = (1, 2, 3);</button>
+        <div id="result2"></div>
+      </div>
+
+      <div id="question3" style="display: none">
+        <h3>Question 3:</h3>
+        <p>What does "chomp" do in Perl?</p>
+        <button onclick="answer(3, 'newline')">
+          Removes trailing newline characters
+        </button>
+        <button onclick="answer(3, 'upper')">
+          Converts string to uppercase
+        </button>
+        <button onclick="answer(3, 'split')">Splits a string into array</button>
+        <div id="result3"></div>
+      </div>
+
+      <div id="birthday" style="display: none">
+        <div class="birthday">
+          🎉 HabbY BIRTHDAAYYY iiiiiiiiiaaaaaaaaannn! 🎉
+        </div>
+        <div class="birthday" style="animation-delay: 5s">
+          <image src="photo.png" />
+        </div>
+        <p>you got all the perl questions right!!! yippeeeeeeeeee3ee1</p>
+      </div>
+    </div>
+
+    <script>
+      var currentQuestion = 1;
+      var correctAnswers = 0;
+
+      function answer(questionNum, choice) {
+        var correct = false;
+        var resultDiv = document.getElementById("result" + questionNum);
+
+        if (questionNum === 1 && choice === "scalar") {
+          correct = true;
+        } else if (questionNum === 2 && choice === "at") {
+          correct = true;
+        } else if (questionNum === 3 && choice === "newline") {
+          correct = true;
+        }
+
+        if (correct) {
+          var audio = new Audio("correct.mp3");
+          audio.volume = 0.7;
+          audio.play();
+          resultDiv.innerHTML = '<p class="correct">correct!</p>';
+          correctAnswers++;
+          setTimeout(function () {
+            document.getElementById("question" + questionNum).style.display =
+              "none";
+            if (questionNum < 3) {
+              document.getElementById(
+                "question" + (questionNum + 1),
+              ).style.display = "block";
+            } else {
+              document.getElementById("birthday").style.display = "block";
+              document.getElementById("container").style =
+                "animation: dumbassery 8s linear 9s infinite;";
+              createConfetti();
+              playBOOM();
+            }
+          }, 1000);
+        } else {
+          var audio = new Audio("wrong.mp3");
+          audio.volume = 0.3;
+          audio.play();
+          resultDiv.innerHTML = '<p class="wrong">wrong, try again</p>';
+        }
+      }
+
+      function createConfetti() {
+        var colors = [
+          "#ff6600",
+          "#ff0066",
+          "#00ff66",
+          "#0066ff",
+          "#ffff00",
+          "#ff00ff",
+        ];
+
+        for (var i = 0; i < 3000; i++) {
+          setTimeout(function () {
+            var confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * 100 + "%";
+            confetti.style.top = 0;
+            confetti.style.background =
+              colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+            document.body.appendChild(confetti);
+
+            setTimeout(function () {
+              confetti.remove();
+            }, 10000);
+          }, i);
+        }
+      }
+      function playBOOM() {
+        var audio = new Audio("alarm.mp3");
+        audio.volume = 1;
+        audio.play();
+        for (let i = 0; i < 100; i++) {
+          setTimeout(function () {
+            var audio = new Audio("boom.mp3");
+            audio.volume = 1;
+            audio.play();
+          }, i * 200);
+        }
+      }
+    </script>
+  </body>
+</html>
